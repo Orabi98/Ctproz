@@ -8,12 +8,12 @@ Subject: {{ subject }}
 Message:
 {{ message }}
 
-Best regards,  
-The {{ company.name }} Team  
+Best regards,
+The {{ company.name }} Team
 
 ---
-{{ company.name }} • {{ company.tagline }}  
-Phone: {{ company.phone }}  
-Email: {{ company.email }}  
-Location: {{ company.city }}  
+{{ company.name }} • {{ company.tagline }}
+Phone: {{ company.phone }}
+Email: {{ company.email }}
+Location: {{ company.city }}
 Website: {{ company.site }}
