@@ -1,4 +1,6 @@
 /* ---------- overall layout so footer stays at bottom ---------- */
+
+
 html, body, .layout-col { height: 100%; }
 .layout-col { display: flex; flex-direction: column; }
 
