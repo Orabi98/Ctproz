@@ -83,7 +83,7 @@ def contact(request):
         from_addr = getattr(settings, "DEFAULT_FROM_EMAIL", to_addr)
 
         internal_text = "\n".join([
-            "New contact form submission from CTProz.com", "",
+            "New contact form submission from CTProz.pro", "",
             f"Name:   {name or '—'}",
             f"Email:  {email or '—'}",
             f"Phone:  {phone or '—'}",
