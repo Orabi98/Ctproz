@@ -123,7 +123,7 @@ def contact(request):
                         "phone": "(949) 875-0940",
                         "email": "info@ctproz.com",
                         "city": "Branford, CT",
-                        "site": "https://ctproz.com",
+                        "site": "https://ctproz.pro",
                     },
                 }
                 text_content = render_to_string("emails/confirmation.txt", ctx)
