@@ -1,8 +1,9 @@
-asgiref==3.9.2
-dj-database-url==3.0.1
 Django==5.2.7
 gunicorn==23.0.0
-packaging==25.0
+whitenoise==6.11.0
+dj-database-url==3.0.1
 psycopg2-binary==2.9.10
 sqlparse==0.5.3
-whitenoise==6.11.0
+asgiref==3.9.2
+packaging==25.0
+python-dotenv>=1.0.1   # optional, if you use .env locally
