@@ -1,0 +1,174 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Home – CTProz{% endblock %}
+
+{% block content %}
+
+<!-- HERO: animated triangles background -->
+<section class="hero-3d position-relative overflow-hidden">
+  <div id="tri-wrap" class="tri-wrap" aria-hidden="true"></div>
+</section>
+
+<!-- ABOUT US -->
+<section id="about" class="py-5 bg-body">
+  <div class="container">
+    <div class="row align-items-center g-4">
+      <div class="col-lg-7">
+        <h2 class="fw-bold mb-3">About CTProz</h2>
+        <p class="lead text-muted">
+          CTProz is a handyman &amp; property maintenance team focused on
+          quality work, clear communication, and on-time delivery. From small repairs to
+          remodeling and ongoing maintenance, we help homeowners and businesses keep their
+          spaces in top shape.
+        </p>
+        <ul class="list-unstyled mt-3">
+          <li class="mb-2"><i class="bi bi-check2-circle text-success me-2"></i>Licensed &amp; insured technicians</li>
+          <li class="mb-2"><i class="bi bi-check2-circle text-success me-2"></i>Transparent, upfront pricing</li>
+          <li class="mb-2"><i class="bi bi-check2-circle text-success me-2"></i>Respect for your time &amp; property</li>
+          <li><i class="bi bi-check2-circle text-success me-2"></i>Residential &amp; light commercial services</li>
+        </ul>
+      </div>
+      <div class="col-lg-5">
+        <div class="ratio ratio-16x9 rounded-3 overflow-hidden shadow-sm">
+          <img src="{% static 'img/about-us.jpg' %}" alt="CTProz handyman at work" class="w-100 h-100 object-fit-cover">
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHY CHOOSE US -->
+<section class="py-5 bg-light">
+  <div class="container text-center">
+    <h2 class="fw-bold mb-4">Why Choose Us?</h2>
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="p-4 h-100 border rounded-3 shadow-sm">
+          <i class="bi bi-shield-check fs-1 text-success mb-3"></i>
+          <h5 class="fw-bold">Trusted &amp; Reliable</h5>
+          <p class="text-muted mb-0">Clients count on us for consistent, high-quality work—every time.</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="p-4 h-100 border rounded-3 shadow-sm">
+          <i class="bi bi-clock-history fs-1 text-success mb-3"></i>
+          <h5 class="fw-bold">On Time &amp; On Budget</h5>
+          <p class="text-muted mb-0">We respect your schedule and deliver without surprises.</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="p-4 h-100 border rounded-3 shadow-sm">
+          <i class="bi bi-people fs-1 text-success mb-3"></i>
+          <h5 class="fw-bold">Customer Focused</h5>
+          <p class="text-muted mb-0">Clear communication and satisfaction are our priorities.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT US -->
+<section class="py-5 bg-body" id="contact-form">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-8">
+        <div class="p-4 p-md-5 bg-white rounded-3 shadow-sm">
+          <h2 class="fw-bold mb-3 text-center">Contact Us</h2>
+          <p class="text-muted text-center mb-4">Tell us about your project and we’ll get back to you quickly.</p>
+
+          <form method="post" action="{% url 'contact' %}" novalidate>
+            {% csrf_token %}
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label class="form-label">Name</label>
+                <input name="name" type="text" class="form-control" placeholder="Your name" required>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Email</label>
+                <input name="email" type="email" class="form-control" placeholder="you@example.com" required>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Phone</label>
+                <input name="phone" type="tel" class="form-control" placeholder="(203) 555-1234">
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Subject</label>
+                <input name="subject" type="text" class="form-control" placeholder="What do you need?">
+              </div>
+              <div class="col-12">
+                <label class="form-label">Message</label>
+                <textarea name="message" class="form-control" rows="5" placeholder="Describe the work you need…" required></textarea>
+              </div>
+            </div>
+
+            <div class="text-center mt-4">
+              <button type="submit" class="btn btn-primary btn-lg">Send Message</button>
+            </div>
+          </form>
+
+          <p class="small text-center text-muted mt-3 mb-0">
+            Or email us directly: <a href="mailto:info@ctproz.com">info@ctproz.com</a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA STRIP -->
+<section class="contact-cta text-light text-center py-5">
+  <div class="container">
+    <h2 class="fw-bold mb-3">Ready to start the conversation?</h2>
+    <p class="mb-4">Contact us today and a member of our team will assist with your handyman &amp; maintenance needs.</p>
+
+    <div class="row justify-content-center">
+      <div class="col-md-4 mb-3">
+        <h6 class="text-uppercase opacity-75 mb-1">Call</h6>
+        <a href="tel:+19498750940" class="cta-link">(949) 875-0940</a>
+      </div>
+      <div class="col-md-4 mb-3">
+        <h6 class="text-uppercase opacity-75 mb-1">Email</h6>
+        <a href="mailto:info@ctproz.com" class="cta-link">info@ctproz.com</a>
+      </div>
+    </div>
+
+    <a href="#contact-form" class="btn btn-light btn-lg mt-3">Contact Us Online</a>
+  </div>
+</section>
+
+<!-- FOOTER LINKS (above global footer) -->
+<section class="footer-links py-5 bg-light text-dark">
+  <div class="container">
+    <div class="row gy-4">
+      <div class="col-sm-6 col-lg-3">
+        <h6 class="fw-bold">Company</h6>
+        <ul class="list-unstyled mb-0">
+          <li><a href="#about" class="link-dark text-decoration-none">About Us</a></li>
+          <li><a href="#contact-form" class="link-dark text-decoration-none">Contact</a></li>
+        </ul>
+      </div>
+      <div class="col-sm-6 col-lg-3">
+        <h6 class="fw-bold">Services</h6>
+        <ul class="list-unstyled mb-0">
+          <li>Repairs</li>
+          <li>Installations</li>
+          <li>Property Maintenance</li>
+        </ul>
+      </div>
+      <div class="col-sm-6 col-lg-3">
+        <h6 class="fw-bold">Get in Touch</h6>
+        <p class="mb-1"><a href="tel:+19498750940" class="link-dark text-decoration-none">(949) 875-0940</a></p>
+        <p class="mb-1"><a href="mailto:info@ctproz.com" class="link-dark text-decoration-none">info@ctproz.com</a></p>
+        <p class="mb-0">Branford, CT</p>
+      </div>
+      <div class="col-sm-6 col-lg-3">
+        <h6 class="fw-bold">Follow Us</h6>
+        <a href="#" class="text-dark me-2"><i class="bi bi-facebook fs-4"></i></a>
+        <a href="#" class="text-dark me-2"><i class="bi bi-instagram fs-4"></i></a>
+        <a href="#" class="text-dark"><i class="bi bi-linkedin fs-4"></i></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

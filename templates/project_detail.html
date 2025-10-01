@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}{{ project.title }} – CTProz{% endblock %}
+{% block content %}
+<div class="container py-5">
+  <a href="{% url 'projects' %}" class="btn btn-light border mb-3">&larr; Back</a>
+  <div class="row g-4">
+    <div class="col-12 col-lg-7">
+      <img src="{% static project.image|default:'img/project1.jpg' %}" class="img-fluid rounded" alt="{{ project.title }}">
+    </div>
+    <div class="col-12 col-lg-5">
+      <h1 class="fw-bold">{{ project.title }}</h1>
+      <div class="text-muted mb-2">{{ project.category }} • {{ project.location }}</div>
+      <p class="mb-0">{{ project.description }}</p>
+    </div>
+  </div>
+</div>
+{% endblock %}

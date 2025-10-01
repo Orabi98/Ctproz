@@ -1,0 +1,108 @@
+/* ---------- overall layout so footer stays at bottom ---------- */
+html, body, .layout-col { height: 100%; }
+.layout-col { display: flex; flex-direction: column; }
+
+/* ---------- hero with center glow, like the pen ---------- */
+.hero-3d {
+  position: relative;
+  min-height: calc(100vh - 56px - 48px); /* navbar + footer heights */
+  background: #000;
+  background-image: radial-gradient(circle at 50% 55%, rgba(255,255,255,0.08) 0%, #222 12%, #000 60%);
+  overflow: hidden;
+}
+
+/* soft “spotlight” in the middle */
+.hero-3d::before{
+  content:"";
+  position:absolute; left:50%; top:55%;
+  width:520px; height:520px; transform:translate(-50%,-50%);
+  background: radial-gradient(circle, rgba(255,255,255,.55) 0%, rgba(255,255,255,.14) 26%, rgba(255,255,255,.04) 44%, rgba(0,0,0,0) 64%);
+  filter: blur(10px); opacity:.75; pointer-events:none; z-index:0;
+}
+
+/* ---------- the 3D stage ---------- */
+.tri-wrap{
+  position:absolute; inset:0;
+  perspective: 900px;            /* depth */
+  transform-style: preserve-3d;  /* keep children 3D */
+  overflow:hidden; z-index:1;
+}
+
+/* a single triangle (color + size are set via JS) */
+.tri{
+  position:absolute; top:50%; left:50%;
+  width:0; height:0; opacity:0;
+  filter: grayscale(1);          /* pen look */
+  /* base triangle; JS will set borders to create ▲ and CSS vars for anim */
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-bottom: 16px solid #bbb;
+
+  /* animation uses CSS variables injected by JS */
+  animation: triFly var(--time, 10s) linear infinite;
+  animation-delay: calc(var(--delay, 0s) * -1);
+  transform:
+    rotate(calc(var(--rot, 0) * 1deg))
+    translate3d(0,0,-1500px)       /* start far */
+    scale(.35);
+}
+
+/* shared keyframes; per-triangle randomness is via CSS variables */
+@keyframes triFly{
+  0%{
+    opacity: .9;
+    transform:
+      rotate(calc(var(--rot, 0) * 1.4deg))
+      translate3d(var(--tx, 0px), var(--ty, 0px), 1000px) /* near the camera */
+      scale(1);
+  }
+  100%{
+    opacity: 0;
+    transform:
+      rotate(calc(var(--rot, 0) * 1deg))
+      translate3d(0,0,-1600px)  /* fly away */
+      scale(.2);
+  }
+}
+
+/* reduced motion = fewer distractions */
+@media (prefers-reduced-motion: reduce){
+  .tri{ animation:none; opacity:.2; transform:translate3d(0,0,0) scale(1); }
+}
+
+/* ---------- CTA band ---------- */
+.contact-cta {
+    background: #000; /* solid black */
+    background-image: radial-gradient(circle at center, rgba(255,255,255,0.08) 0%, rgba(0,0,0,0) 70%);
+    color: #fff;
+  }
+  .contact-cta .cta-link {
+    color: #0d6efd; /* Bootstrap blue for links/buttons */
+    font-weight: 600;
+    text-decoration: none;
+  }
+  .contact-cta .cta-link:hover {
+    text-decoration: underline;
+    color: #66b2ff;
+  }
+  
+/* ---------- footer links section ---------- */
+.footer-links h6 {
+  font-size: .9rem;
+  font-weight: 700;
+  margin-bottom: .75rem;
+  letter-spacing: .02em;
+}
+.footer-links ul {
+  padding-left: 0;
+  list-style: none;
+}
+.footer-links ul li + li {
+  margin-top: .35rem;
+}
+.footer-links a {
+  text-decoration: none;
+}
+.footer-links a:hover {
+  text-decoration: underline;
+}

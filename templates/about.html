@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}About – CTProz{% endblock %}
+{% block content %}
+<div class="container py-5">
+  <h1 class="fw-bold mb-3">About CTProz</h1>
+  <p class="text-muted">
+    We’re a local, insured handyman team serving Connecticut homeowners, landlords, and property managers.
+    We focus on clear scheduling, tidy work, and fair pricing—no job too small.
+  </p>
+  <div class="row text-center g-3 mt-2">
+    <div class="col-12 col-md-4"><div class="p-3 border rounded">Years experience: {{ stats.years_experience }}</div></div>
+    <div class="col-12 col-md-4"><div class="p-3 border rounded">Projects completed: {{ stats.projects_completed }}</div></div>
+    <div class="col-12 col-md-4"><div class="p-3 border rounded">Happy clients: {{ stats.happy_clients }}</div></div>
+  </div>
+</div>
+{% endblock %}

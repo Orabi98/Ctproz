@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}Services – CTProz{% endblock %}
+{% block content %}
+<div class="container py-5">
+  <h1 class="fw-bold mb-4">Handyman Services</h1>
+  <div class="row g-4">
+    {% for s in services %}
+      <div class="col-12 col-md-6 col-lg-4">
+        <div class="card h-100 card-hover">
+          <div class="card-body">
+            <div class="fs-1 mb-2"><i class="bi {{ s.icon|default:'bi-tools' }}"></i></div>
+            <h5 class="card-title">{{ s.title }}</h5>
+            <p class="card-text text-muted">{{ s.description }}</p>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

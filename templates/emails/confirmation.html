@@ -1,0 +1,31 @@
+<!doctype html>
+<html>
+  <body style="font-family: Arial, sans-serif; background:#f9f9f9; padding:20px; color:#333;">
+    <div style="max-width:600px; margin:auto; background:white; border-radius:8px; padding:20px;">
+      <div style="text-align:center; margin-bottom:20px;">
+        <img src="cid:ctproz-logo" alt="{{ company.name }} Logo" style="max-height:80px;">
+      </div>
+
+      <h2 style="color:#2ECC71;">Thank you for contacting {{ company.name }}!</h2>
+      <p>Hello {{ name }},</p>
+      <p>
+        We have received your request regarding <strong>{{ subject }}</strong>.  
+        A member of our team will be in touch soon.
+      </p>
+
+      <h3>Summary of your request:</h3>
+      <p>{{ message }}</p>
+
+      <p style="margin-top:30px;">Best regards,<br>
+         The {{ company.name }} Team</p>
+
+      <hr style="margin:30px 0;">
+      <footer style="font-size:14px; color:#777;">
+        {{ company.name }} • {{ company.tagline }}<br>
+        Phone: {{ company.phone }} | Email: {{ company.email }}<br>
+        Location: {{ company.city }}<br>
+        Website: <a href="{{ company.site }}" style="color:#2ECC71;">{{ company.site }}</a>
+      </footer>
+    </div>
+  </body>
+</html>
