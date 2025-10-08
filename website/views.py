@@ -120,7 +120,7 @@ def contact(request):
                     "company": {
                         "name": "CTProz",
                         "tagline": "Handyman & Property Maintenance",
-                        "phone": "(949) 875-0940",
+                        "phone": "(203)200-0316",
                         "email": "info@ctproz.com",
                         "city": "Branford, CT",
                         "site": "https://ctproz.pro",
