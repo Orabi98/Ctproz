@@ -65,23 +65,17 @@ def contact(request):
         if (request.POST.get("company") or "").strip():
             return render(request, "contact.html", {"sent": True, "email_sent": True})
 
-        # 🔽 Safely trim fields to DB length limits
-        name = (request.POST.get("name") or "").strip()[:120]
+        name = (request.POST.get("name") or "").strip()
         email = (request.POST.get("email") or "").strip()
-        phone = (request.POST.get("phone") or "").strip()[:50]
+        phone = (request.POST.get("phone") or "").strip()
         subject = (request.POST.get("subject") or "").strip() or "Work"
         body_raw = (request.POST.get("message") or "").strip()
         body = strip_tags(body_raw)
 
-        # Save to DB (embedding subject) – and enforce max length 120 for message
+        # Save to DB (embedding subject)
         combined_message = f"Subject: {subject}\n\n{body}" if subject else body
-        combined_message = combined_message[:120]  # 🔥 critical: avoid varchar(120) overflow
-
         ContactMessage.objects.create(
-            name=name,
-            email=email,
-            phone=phone,
-            message=combined_message,
+            name=name, email=email, phone=phone, message=combined_message
         )
 
         # ------- 1) Internal notification to info@ -------
@@ -149,14 +143,15 @@ def contact(request):
                 if logo_path:
                     with open(logo_path, "rb") as f:
                         img = MIMEImage(f.read())
-                    img.add_header("Content-ID", "<ctproz-logo>")
+                    img.add_header("Content-ID", "<ctproz-logo>")    # note the brackets
                     img.add_header("Content-Disposition", "inline", filename="logo.png")
+                    # For inline images, ensure related subtype
                     conf.mixed_subtype = "related"
                     conf.attach(img)
                 else:
                     log.warning("Logo not found at static/img/logo.png — skipping CID embed")
 
-                conf.send(fail_silently=False)
+                conf.send(fail_silently=False)  # don't silence so we can debug if needed
             except BadHeaderError:
                 log.exception("Email bad header (confirmation)")
             except Exception:
@@ -165,3 +160,4 @@ def contact(request):
         return render(request, "contact.html", {"sent": True, "email_sent": email_sent})
 
     return render(request, "contact.html")
+
