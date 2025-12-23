@@ -23,10 +23,10 @@ class Testimonial(models.Model):
         return self.client_name
 
 class ContactMessage(models.Model):
-    name = models.CharField(max_length=120)
-    email = models.EmailField()
-    phone = models.CharField(max_length=50, blank=True)
-    message = models.TextField()
+    name    = models.CharField(max_length=200)      # or TextField()
+    email   = models.EmailField(max_length=254)
+    phone   = models.CharField(max_length=50, blank=True)
+    subject = models.CharField(max_length=200, blank=True)
+    message = models.TextField()                    # keep as TextField
     created_at = models.DateTimeField(auto_now_add=True)
-    def __str__(self):
-        return f"{self.name} - {self.email}"
+
