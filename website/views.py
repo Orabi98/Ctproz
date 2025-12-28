@@ -61,8 +61,9 @@ def contact(request):
     POST -> save message; email internal notice to info@; email confirmation to visitor (with CID logo).
     """
     if request.method == "POST":
-        # (Optional) honeypot:
+        # (Optional) honeypot to catch bots: real users won't see/fill this
         if (request.POST.get("company") or "").strip():
+            # Pretend success so bots don't know we ignored them
             return render(request, "contact.html", {"sent": True, "email_sent": True})
 
         name = (request.POST.get("name") or "").strip()
@@ -72,10 +73,25 @@ def contact(request):
         body_raw = (request.POST.get("message") or "").strip()
         body = strip_tags(body_raw)
 
-        # Save to DB (embedding subject)
+        # --------- LIMIT WHAT WE SAVE TO DB (to avoid varchar(120) error) ----------
+        # Your Postgres error shows: "value too long for type character varying(120)"
+        # So we clamp all short text fields to <= 120 characters.
+        MAX_DB_LEN = 120
+
+        name_db = name[:MAX_DB_LEN]
+        phone_db = phone[:MAX_DB_LEN]
+
+        # This is the text going into the DB column (which is varchar(120))
         combined_message = f"Subject: {subject}\n\n{body}" if subject else body
+        message_db = combined_message[:MAX_DB_LEN]
+        # -------------------------------------------------------------------------- #
+
+        # Save a short preview/snippet to the DB (full message still goes into email)
         ContactMessage.objects.create(
-            name=name, email=email, phone=phone, message=combined_message
+            name=name_db,
+            email=email,       # EmailField usually allows up to 254 chars
+            phone=phone_db,
+            message=message_db,
         )
 
         # ------- 1) Internal notification to info@ -------
@@ -116,7 +132,7 @@ def contact(request):
                 ctx = {
                     "name": name or "there",
                     "subject": subject,
-                    "message": body,
+                    "message": body,   # full message in the email
                     "company": {
                         "name": "CTProz",
                         "tagline": "Handyman & Property Maintenance",
@@ -138,20 +154,19 @@ def contact(request):
                 )
                 conf.attach_alternative(html_content, "text/html")
 
-                # Embed logo.png as inline image with Content-ID
-                logo_path = finders.find("img/logo.png")  # looks in staticfiles dirs
+                # Embed logo.png as inline CID image
+                logo_path = finders.find("img/logo.png")
                 if logo_path:
                     with open(logo_path, "rb") as f:
                         img = MIMEImage(f.read())
-                    img.add_header("Content-ID", "<ctproz-logo>")    # note the brackets
+                    img.add_header("Content-ID", "<ctproz-logo>")
                     img.add_header("Content-Disposition", "inline", filename="logo.png")
-                    # For inline images, ensure related subtype
                     conf.mixed_subtype = "related"
                     conf.attach(img)
                 else:
                     log.warning("Logo not found at static/img/logo.png — skipping CID embed")
 
-                conf.send(fail_silently=False)  # don't silence so we can debug if needed
+                conf.send(fail_silently=False)
             except BadHeaderError:
                 log.exception("Email bad header (confirmation)")
             except Exception:
@@ -160,4 +175,5 @@ def contact(request):
         return render(request, "contact.html", {"sent": True, "email_sent": email_sent})
 
     return render(request, "contact.html")
+
 
