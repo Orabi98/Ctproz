@@ -6,6 +6,7 @@ from django.conf import settings
 from django.contrib.staticfiles import finders
 from email.mime.image import MIMEImage
 import logging
+from django.db.utils import DataError
 
 from .models import Service, Project, Testimonial, ContactMessage
 
@@ -55,15 +56,18 @@ def about(request):
     return render(request, "about.html", {"stats": stats})
 
 
+
+
+
+
 def contact(request):
     """
     GET  -> show contact page
     POST -> save message; email internal notice to info@; email confirmation to visitor (with CID logo).
     """
     if request.method == "POST":
-        # (Optional) honeypot to catch bots: real users won't see/fill this
+        # 🪤 Honeypot for bots – real users never see 'company' field
         if (request.POST.get("company") or "").strip():
-            # Pretend success so bots don't know we ignored them
             return render(request, "contact.html", {"sent": True, "email_sent": True})
 
         name = (request.POST.get("name") or "").strip()
@@ -73,33 +77,45 @@ def contact(request):
         body_raw = (request.POST.get("message") or "").strip()
         body = strip_tags(body_raw)
 
-        # --------- LIMIT WHAT WE SAVE TO DB (to avoid varchar(120) error) ----------
-        # Your Postgres error shows: "value too long for type character varying(120)"
-        # So we clamp all short text fields to <= 120 characters.
-        MAX_DB_LEN = 120
+        # ✅ server-side required fields (so bots can’t send empty crap)
+        if not name or not email or not body:
+            return render(request, "contact.html", {
+                "error": "Please fill in your name, email, and message.",
+                "sent": False,
+            })
 
-        name_db = name[:MAX_DB_LEN]
-        phone_db = phone[:MAX_DB_LEN]
+        # 🔒 Clamp values so they NEVER exceed your DB column sizes
+        # Your DB errors tell us you have varchar(50) and varchar(120).
+        MAX_NAME_LEN = 120      # safe for name
+        MAX_PHONE_LEN = 20      # safely under varchar(50)
+        MAX_MSG_LEN = 120       # matches your message column limit
 
-        # This is the text going into the DB column (which is varchar(120))
+        name_db = name[:MAX_NAME_LEN]
+        phone_db = phone[:MAX_PHONE_LEN]
+
         combined_message = f"Subject: {subject}\n\n{body}" if subject else body
-        message_db = combined_message[:MAX_DB_LEN]
-        # -------------------------------------------------------------------------- #
+        message_db = combined_message[:MAX_MSG_LEN]
 
-        # Save a short preview/snippet to the DB (full message still goes into email)
-        ContactMessage.objects.create(
-            name=name_db,
-            email=email,       # EmailField usually allows up to 254 chars
-            phone=phone_db,
-            message=message_db,
-        )
+        db_saved = True
+        try:
+            ContactMessage.objects.create(
+                name=name_db,
+                email=email,      # EmailField normally allows up to 254 chars
+                phone=phone_db,
+                message=message_db,
+            )
+        except DataError:
+            # 🚨 If the database STILL complains for any reason, log it and continue.
+            log.exception("ContactMessage save failed (likely length limit). Skipping DB save.")
+            db_saved = False
 
         # ------- 1) Internal notification to info@ -------
         to_addr = getattr(settings, "EMAIL_HOST_USER", "info@ctproz.com")
         from_addr = getattr(settings, "DEFAULT_FROM_EMAIL", to_addr)
 
         internal_text = "\n".join([
-            "New contact form submission from CTProz.pro", "",
+            "New contact form submission from CTProz.pro",
+            "",
             f"Name:   {name or '—'}",
             f"Email:  {email or '—'}",
             f"Phone:  {phone or '—'}",
@@ -154,7 +170,6 @@ def contact(request):
                 )
                 conf.attach_alternative(html_content, "text/html")
 
-                # Embed logo.png as inline CID image
                 logo_path = finders.find("img/logo.png")
                 if logo_path:
                     with open(logo_path, "rb") as f:
@@ -172,8 +187,13 @@ def contact(request):
             except Exception:
                 log.exception("SMTP send failed (confirmation)")
 
-        return render(request, "contact.html", {"sent": True, "email_sent": email_sent})
+        return render(request, "contact.html", {
+            "sent": True,
+            "email_sent": email_sent,
+            "db_saved": db_saved,
+        })
 
     return render(request, "contact.html")
+
 
 
