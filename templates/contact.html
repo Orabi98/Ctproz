@@ -1,35 +1,48 @@
-{% extends "base.html" %}
-{% block title %}Contact – CTProz{% endblock %}
-{% block content %}
-<div class="container py-5">
-  <h1 class="fw-bold mb-2">Get a Free Estimate</h1>
-  <p class="text-muted mb-4">Tell us what you need—most jobs can be quoted same day.</p>
+<form method="post" class="row g-3" novalidate>
+  {% csrf_token %}
 
-  {% if sent %}
-    <div class="alert alert-success">Thanks! Your message was sent.</div>
+  {# show errors #}
+  {% if error %}
+    <div class="col-12">
+      <div class="alert alert-danger">{{ error }}</div>
+    </div>
   {% endif %}
 
-  <form method="post" class="row g-3">
-    {% csrf_token %}
-    <div class="col-md-6">
-      <label class="form-label">Name</label>
-      <input class="form-control" name="name" required>
-    </div>
-    <div class="col-md-6">
-      <label class="form-label">Email</label>
-      <input class="form-control" name="email" type="email" required>
-    </div>
-    <div class="col-md-6">
-      <label class="form-label">Phone</label>
-      <input class="form-control" name="phone">
-    </div>
-    <div class="col-12">
-      <label class="form-label">Message</label>
-      <textarea class="form-control" name="message" rows="4" required></textarea>
-    </div>
-    <div class="col-12">
-      <button class="btn btn-primary">Send</button>
-    </div>
-  </form>
-</div>
-{% endblock %}
+  {# Honeypot (hidden field). Bots often fill it; humans won't. #}
+  <div style="position:absolute; left:-9999px; top:-9999px;" aria-hidden="true">
+    <label>Company</label>
+    <input type="text" name="company" tabindex="-1" autocomplete="off">
+  </div>
+
+  <div class="col-md-6">
+    <label class="form-label">Name</label>
+    <input class="form-control" name="name" required>
+  </div>
+
+  <div class="col-md-6">
+    <label class="form-label">Email</label>
+    <input class="form-control" name="email" type="email" required>
+  </div>
+
+  <div class="col-md-6">
+    <label class="form-label">Phone</label>
+    <input class="form-control" name="phone">
+  </div>
+
+  <div class="col-12">
+    <label class="form-label">Message</label>
+    <textarea class="form-control" name="message" rows="4" required></textarea>
+  </div>
+
+  {# ✅ Turnstile widget #}
+  <div class="col-12">
+    <div class="cf-turnstile" data-sitekey="{{ TURNSTILE_SITE_KEY }}"></div>
+  </div>
+
+  <div class="col-12">
+    <button class="btn btn-primary" type="submit">Send</button>
+  </div>
+</form>
+
+{# Turnstile script #}
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
