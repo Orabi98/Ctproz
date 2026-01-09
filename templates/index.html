@@ -67,56 +67,8 @@
   </div>
 </section>
 
-<!-- CONTACT US -->
-<section class="py-5 bg-body" id="contact-form">
-  <div class="container">
-    <div class="row justify-content-center">
-      <div class="col-lg-8">
-        <div class="p-4 p-md-5 bg-white rounded-3 shadow-sm">
-          <h2 class="fw-bold mb-3 text-center">Contact Us</h2>
-          <p class="text-muted text-center mb-4">Tell us about your project and we’ll get back to you quickly.</p>
-
-          <form method="post" action="{% url 'contact' %}">
-            {% csrf_token %}
-            <div class="row g-3">
-              <div class="col-md-6">
-                <label class="form-label">Name</label>
-                <input name="name" type="text" class="form-control" placeholder="Your name" required>
-              </div>
-              <div class="col-md-6">
-                <label class="form-label">Email</label>
-                <input name="email" type="email" class="form-control" placeholder="you@example.com" required>
-              </div>
-              <div class="col-md-6">
-                <label class="form-label">Phone</label>
-                <input name="phone" type="tel" class="form-control" placeholder="(203) 555-1234">
-              </div>
-              <div class="col-md-6">
-                <label class="form-label">Subject</label>
-                <input name="subject" type="text" class="form-control" placeholder="What do you need?">
-              </div>
-              <div class="col-12">
-                <label class="form-label">Message</label>
-                <textarea name="message" class="form-control" rows="5" placeholder="Describe the work you need…" required></textarea>
-              </div>
-            </div>
-
-            <div class="text-center mt-4">
-              <button type="submit" class="btn btn-primary btn-lg">Send Message</button>
-            </div>
-          </form>
-
-          <p class="small text-center text-muted mt-3 mb-0">
-            Or email us directly: <a href="mailto:info@ctproz.com">info@ctproz.com</a>
-          </p>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
 <!-- CTA STRIP -->
-<section class="contact-cta text-light text-center py-5">
+<section class="contact-cta text-light text-center py-5" id="contact">
   <div class="container">
     <h2 class="fw-bold mb-3">Ready to start the conversation?</h2>
     <p class="mb-4">Contact us today and a member of our team will assist with your handyman &amp; maintenance needs.</p>
@@ -131,8 +83,6 @@
         <a href="mailto:info@ctproz.com" class="cta-link">info@ctproz.com</a>
       </div>
     </div>
-
-    <a href="#contact-form" class="btn btn-light btn-lg mt-3">Contact Us Online</a>
   </div>
 </section>
 
@@ -144,7 +94,8 @@
         <h6 class="fw-bold">Company</h6>
         <ul class="list-unstyled mb-0">
           <li><a href="#about" class="link-dark text-decoration-none">About Us</a></li>
-          <li><a href="#contact-form" class="link-dark text-decoration-none">Contact</a></li>
+          <li><a href="mailto:info@ctproz.com" class="link-dark text-decoration-none">Email Us</a></li>
+          <li><a href="tel:+12032000316" class="link-dark text-decoration-none">Call Us</a></li>
         </ul>
       </div>
       <div class="col-sm-6 col-lg-3">
@@ -157,7 +108,7 @@
       </div>
       <div class="col-sm-6 col-lg-3">
         <h6 class="fw-bold">Get in Touch</h6>
-        <p class="mb-1"><a href="tel:+19498750940" class="link-dark text-decoration-none">(203)200-0316</a></p>
+        <p class="mb-1"><a href="tel:+12032000316" class="link-dark text-decoration-none">(203)200-0316</a></p>
         <p class="mb-1"><a href="mailto:info@ctproz.com" class="link-dark text-decoration-none">info@ctproz.com</a></p>
         <p class="mb-0">Branford, CT</p>
       </div>
